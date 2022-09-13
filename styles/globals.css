@@ -12,15 +12,19 @@ h1 {
 
 /* -- FORM STYLES */
 .form-container {
-  @apply flex flex-col bg-slate-700;
+  @apply relative flex flex-col bg-slate-700;
 }
 
-.form-container > div {
+.form-container-heading {
   @apply px-6 pt-10;
 }
 
 .form-container-error {
   @apply text-white font-semibold p-6 bg-red-500;
+}
+
+.form-container-success {
+  @apply absolute top-0 left-0 w-full h-full grid place-items-center bg-purple-500 font-bold text-xl;
 }
 
 form {

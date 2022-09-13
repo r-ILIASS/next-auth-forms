@@ -61,10 +61,18 @@ const Register = () => {
     }
 
     console.log(email);
+    setSuccess(true);
   };
 
   return (
     <section className="form-container">
+      {/* success message */}
+      {success && (
+        <div className="form-container-success">
+          Account successfully created!
+        </div>
+      )}
+
       {/* -- Error Message */}
       {errMsg && (
         <p className="form-container-error" ref={errRef} aria-live="assertive">
@@ -73,7 +81,7 @@ const Register = () => {
       )}
 
       {/* -- Form Title */}
-      <div>
+      <div className="form-container-heading">
         <h1>Register</h1>
       </div>
 
