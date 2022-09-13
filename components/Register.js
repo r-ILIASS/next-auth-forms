@@ -75,7 +75,11 @@ const Register = () => {
       });
       setSuccess(true);
     } catch (error) {
-      setErrMsg(error.response.data.message);
+      if (error.message === "Network Error") {
+        setErrMsg("Something went wrong, please try again later!");
+      } else {
+        setErrMsg(error.response.data.message);
+      }
     }
   };
 
