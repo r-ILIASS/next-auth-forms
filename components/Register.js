@@ -1,17 +1,23 @@
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import axios from "../utils/axios";
 
+const REGISTER_URL = "/register";
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Register = () => {
   const emailRef = useRef();
+  const fullnameRef = useRef();
   const errRef = useRef();
 
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
+
+  const [fullname, setFullname] = useState("");
+  const [fullnameFocus, setFullnameFocus] = useState(false);
 
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(false);
@@ -60,8 +66,17 @@ const Register = () => {
       return;
     }
 
-    console.log(email);
-    setSuccess(true);
+    // submit to backend
+    try {
+      const response = await axios.post(REGISTER_URL, {
+        email,
+        password,
+        fullname,
+      });
+      setSuccess(true);
+    } catch (error) {
+      setErrMsg(error.response.data.message);
+    }
   };
 
   return (
@@ -110,6 +125,21 @@ const Register = () => {
           </p>
         </div>
 
+        {/* fullname */}
+        <div>
+          <label htmlFor="fullname">Full Name</label>
+          <input
+            type="fullname"
+            id="fullname"
+            ref={fullnameRef}
+            autoComplete="off"
+            onChange={(e) => setFullname(e.target.value)}
+            required
+            onFocus={() => setFullnameFocus(true)}
+            onBlur={() => setFullnameFocus(false)}
+          />
+        </div>
+
         {/* password */}
         <div>
           <label htmlFor="password">Password</label>
@@ -145,7 +175,7 @@ const Register = () => {
 
         {/* match password */}
         <div>
-          <label htmlFor="confirm_password">Confirm Password:</label>
+          <label htmlFor="confirm_password">Confirm Password</label>
           <input
             type="password"
             id="confirm_password"
