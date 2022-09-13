@@ -68,7 +68,7 @@ const Register = () => {
 
     // submit to backend
     try {
-      const response = await axios.post(REGISTER_URL, {
+      await axios.post(REGISTER_URL, {
         email,
         password,
         fullname,
