@@ -12,11 +12,19 @@ h1 {
 
 /* -- FORM STYLES */
 .form-container {
-  @apply flex flex-col px-6 py-10 bg-slate-700;
+  @apply flex flex-col bg-slate-700;
+}
+
+.form-container > div {
+  @apply px-6 pt-10;
+}
+
+.form-container-error {
+  @apply text-white font-semibold p-6 bg-red-500;
 }
 
 form {
-  @apply flex flex-col space-y-5 w-full min-w-[24rem] max-w-sm;
+  @apply px-6 pb-10 flex flex-col space-y-5 w-full min-w-[24rem] max-w-sm;
 }
 
 form > div {

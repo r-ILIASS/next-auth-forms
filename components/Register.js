@@ -50,20 +50,32 @@ const Register = () => {
   // form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("submit");
+
+    // validate form state
+    const v1 = EMAIL_REGEX.test(email);
+    const v2 = PASSWORD_REGEX.test(password);
+    const v3 = password === matchPassword;
+    if (!v1 || !v2 || !v3) {
+      setErrMsg("Invalid Inputs");
+      return;
+    }
+
+    console.log(email);
   };
 
   return (
     <section className="form-container">
       {/* -- Error Message */}
       {errMsg && (
-        <p ref={errRef} aria-live="assertive">
+        <p className="form-container-error" ref={errRef} aria-live="assertive">
           {errMsg}
         </p>
       )}
 
       {/* -- Form Title */}
-      <h1>Register</h1>
+      <div>
+        <h1>Register</h1>
+      </div>
 
       {/* -- Form */}
       <form onSubmit={handleSubmit}>
@@ -140,7 +152,9 @@ const Register = () => {
           <p
             id="confirmnote"
             className={
-              matchPasswordFocus && matchPassword && !validMatchPassword ? "block" : "hidden"
+              matchPasswordFocus && matchPassword && !validMatchPassword
+                ? "block"
+                : "hidden"
             }
           >
             Must match the first password input field.
