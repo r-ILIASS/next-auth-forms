@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import axios from "../utils/axios";
 // hooks
 import { useAuth } from "../hooks/useAuth";
@@ -9,8 +10,8 @@ const LOGIN_URL = "/auth";
 
 const Register = () => {
   const { setAuth } = useAuth();
-  
-  console.log(setAuth)
+  const router = useRouter();
+  console.log(router);
 
   const emailRef = useRef();
   const errRef = useRef();
@@ -48,9 +49,10 @@ const Register = () => {
       // save response to AuthContext's state
       setAuth({ email, password, roles, accessToken }); // TODO: check if you still to send the password to context
 
-      setEmail("");
-      setPassword("");
-      setSuccess(true);
+      setEmail(""); // TODO: remove
+      setPassword(""); // TODO: remove
+      setSuccess(true); // TODO: remove
+      router.replace("/employees");
     } catch (error) {
       if (error.message === "Network Error") {
         setErrMsg("Something went wrong, please try again later!");
