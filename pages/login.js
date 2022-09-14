@@ -2,13 +2,15 @@ import { useRef, useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "../utils/axios";
-// context
-import AuthContext from "../context/authProvider";
+// hooks
+import { useAuth } from "../hooks/useAuth";
 
 const LOGIN_URL = "/auth";
 
 const Register = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
+  
+  console.log(setAuth)
 
   const emailRef = useRef();
   const errRef = useRef();
