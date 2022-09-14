@@ -1,6 +1,55 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+// hooks
+import { useAuth } from "../hooks/useAuth";
+import { useRefreshToken } from "../hooks/useRefreshToken";
+// utils
+import axios from "../utils/axios";
 
 export default function Home() {
+  const router = useRouter();
+  const { auth } = useAuth();
+  const refresh = useRefreshToken();
+
+  const [employees, setEmployees] = useState();
+
+  // is authed?
+  useEffect(() => {
+    if (!auth?.email) {
+      router.replace("/login");
+    }
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    // fetch employees
+    const getEmployees = async () => {
+      try {
+        const { data } = await axios.get("/employees", {
+          signal: controller.signal,
+        });
+        console.log(data); // TODO:
+
+        isMounted && setEmployees(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getEmployees();
+
+    // clean up
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
+  if (!auth?.email) return <div className="Not Allowed" />;
+
   return (
     <div>
       <Head>
@@ -10,8 +59,27 @@ export default function Home() {
       </Head>
 
       <main className="min-h-screen grid place-items-center">
-        Employees page
+        <div>
+          <ul>
+            {employees &&
+              employees.map((employee) => (
+                <li key={employee._id}>{employee.email}</li>
+              ))}
+          </ul>
+          <button
+            className="p-2 bg-gray-50 text-gray-900 font-bold rounded-md"
+            onClick={() => refresh()}
+          >
+            Refresh
+          </button>
+        </div>
       </main>
     </div>
   );
+}
+
+export function getServerSideProps() {
+  return {
+    props: {},
+  };
 }

@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 
   // TODO: remove
   useEffect(() => {
-    console.log(auth);
+    console.log("AUTH PROVIDER STATE", auth);
   }, [auth]);
 
   return (

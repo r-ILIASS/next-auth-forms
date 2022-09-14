@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const LOGIN_URL = "/auth";
 
-const Register = () => {
+const Login = () => {
   const { setAuth } = useAuth();
   const router = useRouter();
 
@@ -37,10 +37,16 @@ const Register = () => {
 
     // submit to backend
     try {
-      const res = await axios.post(LOGIN_URL, {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        LOGIN_URL,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       const accessToken = res?.data?.accessToken;
       const roles = res?.data?.roles;
@@ -146,4 +152,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
