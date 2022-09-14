@@ -1,16 +1,20 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "../utils/axios";
+// context
+import AuthContext from "../context/authProvider";
 
 const LOGIN_URL = "/auth";
 
 const Register = () => {
+  const { setAuth } = useContext(AuthContext);
+
   const emailRef = useRef();
   const errRef = useRef();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("email@email.com"); // TODO:
+  const [password, setPassword] = useState("G4moto@ma"); // TODO:
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
@@ -31,17 +35,33 @@ const Register = () => {
 
     // submit to backend
     try {
-      await axios.post(LOGIN_URL, {
+      const res = await axios.post(LOGIN_URL, {
         email,
         password,
       });
+
+      const accessToken = res?.data?.accessToken;
+      const roles = res?.data?.roles;
+
+      // save response to AuthContext's state
+      setAuth({ email, password, roles, accessToken }); // TODO: check if you still to send the password to context
+
+      setEmail("");
+      setPassword("");
       setSuccess(true);
     } catch (error) {
       if (error.message === "Network Error") {
         setErrMsg("Something went wrong, please try again later!");
+      } else if (error.response.status === 400) {
+        setErrMsg("Missing email or password");
+      } else if (error.response.status === 401) {
+        setErrMsg("Unauthorized");
       } else {
-        setErrMsg(error.response.data.message);
+        setErrMsg("Login failed!");
       }
+      setTimeout(() => {
+        errRef.current.focus();
+      }, 1000); // FIXME: find a better solution to this
     }
   };
 
@@ -57,9 +77,7 @@ const Register = () => {
         <section className="form-container">
           {/* success message */}
           {success && (
-            <div className="form-container-success">
-              You are logged in!
-            </div>
+            <div className="form-container-success">You are logged in!</div>
           )}
 
           {/* -- Error Message */}
