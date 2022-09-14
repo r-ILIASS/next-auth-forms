@@ -11,7 +11,6 @@ const LOGIN_URL = "/auth";
 const Register = () => {
   const { setAuth } = useAuth();
   const router = useRouter();
-  console.log(router);
 
   const emailRef = useRef();
   const errRef = useRef();
@@ -47,7 +46,7 @@ const Register = () => {
       const roles = res?.data?.roles;
 
       // save response to AuthContext's state
-      setAuth({ email, password, roles, accessToken }); // TODO: check if you still to send the password to context
+      setAuth({ email, roles, accessToken }); // TODO: check if you still to send the password to context
 
       setEmail(""); // TODO: remove
       setPassword(""); // TODO: remove
