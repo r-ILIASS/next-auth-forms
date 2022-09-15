@@ -1,5 +1,5 @@
 import { axiosPrivate } from "../utils/axios";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useRefreshToken } from "../hooks/useRefreshToken";
 import { useAuth } from "./useAuth";
 
@@ -10,9 +10,9 @@ export const useAxiosPrivate = () => {
     useEffect(() => {
         const requestInterceptor = axiosPrivate.interceptors.request.use(
             (config) => {
-                if (!config.headers["Autorization"]) {
+                if (!config.headers["Authorization"]) {
                     config.headers[
-                        "Autorization"
+                        "Authorization"
                     ] = `Bearer ${auth?.accessToken}`;
                 }
                 return config;
