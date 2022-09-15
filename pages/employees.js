@@ -19,8 +19,6 @@ export default function Employees() {
         if (!auth?.email) {
             router.replace("/login");
         }
-
-        console.log(auth.email);
     });
 
     useEffect(() => {
