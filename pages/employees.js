@@ -3,14 +3,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 // hooks
 import { useAuth } from "../hooks/useAuth";
-import { useRefreshToken } from "../hooks/useRefreshToken";
 // utils
 import axios from "../utils/axios";
 
 export default function Home() {
   const router = useRouter();
   const { auth } = useAuth();
-  const refresh = useRefreshToken();
 
   const [employees, setEmployees] = useState();
 
@@ -66,12 +64,6 @@ export default function Home() {
                 <li key={employee._id}>{employee.email}</li>
               ))}
           </ul>
-          <button
-            className="p-2 bg-gray-50 text-gray-900 font-bold rounded-md"
-            onClick={() => refresh()}
-          >
-            Refresh
-          </button>
         </div>
       </main>
     </div>
