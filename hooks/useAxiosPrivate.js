@@ -32,10 +32,12 @@ export const useAxiosPrivate = () => {
                     ] = `Bearer ${newAccessToken}`;
                     return axiosPrivate(prevRequest);
                 }
+                return Promise.reject(error);
             }
         );
 
         return () => {
+            axiosPrivate.interceptors.request.eject(requestInterceptor);
             axiosPrivate.interceptors.response.eject(responseInterceptor);
         };
     }, [auth, refresh]);
