@@ -57,11 +57,7 @@ const Login = () => {
             setEmail(""); // TODO: remove
             setPassword(""); // TODO: remove
             setSuccess(true); // TODO: remove
-
-            // send user to last visited page or /employees
-            router.query && router.query.from
-                ? router.push(router.query.from)
-                : router.replace("/employees");
+            router.replace("/employees");
         } catch (error) {
             if (error.message === "Network Error") {
                 setErrMsg("Something went wrong, please try again later!");

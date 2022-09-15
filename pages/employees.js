@@ -1,11 +1,12 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 // hooks
 import { useAuth } from "../hooks/useAuth";
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate";
 
-export default function Home() {
+export default function Employees() {
     const router = useRouter();
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
@@ -17,6 +18,8 @@ export default function Home() {
         if (!auth?.email) {
             router.replace("/login");
         }
+        
+        console.log(auth.email)
     });
 
     useEffect(() => {
@@ -29,15 +32,13 @@ export default function Home() {
                 const { data } = await axiosPrivate.get("/employees", {
                     signal: controller.signal,
                 });
-                console.log(data); // TODO:
 
                 isMounted && setEmployees(data);
             } catch (error) {
-                console.error(error);
-                router.replace({
-                    pathname: "/login",
-                    query: { from: router.pathname },
-                });
+                console.error("Axios error > Employees page", error);
+                if (error?.response?.status === 403) {
+                  router.replace("/login")
+                }
             }
         };
 
@@ -66,6 +67,7 @@ export default function Home() {
             <main className="min-h-screen grid place-items-center">
                 <div>
                     <p>Logged in as {auth.email}</p>
+                    <Link href="/menu"><a>Go To Menu</a></Link>
                     <ul>
                         {employees &&
                             employees.map((employee) => (
