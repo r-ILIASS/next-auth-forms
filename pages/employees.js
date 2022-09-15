@@ -34,12 +34,16 @@ export default function Home() {
                 isMounted && setEmployees(data);
             } catch (error) {
                 console.error(error);
+                router.replace({
+                    pathname: "/login",
+                    query: { from: router.pathname },
+                });
             }
         };
 
         getEmployees();
 
-        // clean up
+        // avoid flashes of content before redirecting to login page
         return () => {
             isMounted = false;
             controller.abort();
@@ -61,7 +65,7 @@ export default function Home() {
 
             <main className="min-h-screen grid place-items-center">
                 <div>
-                  <p>Logged in as {auth.email}</p>
+                    <p>Logged in as {auth.email}</p>
                     <ul>
                         {employees &&
                             employees.map((employee) => (
