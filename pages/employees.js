@@ -1,12 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // hooks
 import { useAuth } from "../hooks/useAuth";
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate";
 
 export default function Employees() {
+    const effectRun = useRef(false);
     const router = useRouter();
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
@@ -18,8 +19,8 @@ export default function Employees() {
         if (!auth?.email) {
             router.replace("/login");
         }
-        
-        console.log(auth.email)
+
+        console.log(auth.email);
     });
 
     useEffect(() => {
@@ -37,17 +38,21 @@ export default function Employees() {
             } catch (error) {
                 console.error("Axios error > Employees page", error);
                 if (error?.response?.status === 403) {
-                  router.replace("/login")
+                    router.replace("/login");
                 }
             }
         };
 
-        getEmployees();
+        // check if useEffect has run before
+        if (effectRun.current) {
+            getEmployees();
+        }
 
         // avoid flashes of content before redirecting to login page
         return () => {
             isMounted = false;
             controller.abort();
+            effectRun.current = true;
         };
     }, []);
 
@@ -67,7 +72,9 @@ export default function Employees() {
             <main className="min-h-screen grid place-items-center">
                 <div>
                     <p>Logged in as {auth.email}</p>
-                    <Link href="/menu"><a>Go To Menu</a></Link>
+                    <Link href="/menu">
+                        <a>Go To Menu</a>
+                    </Link>
                     <ul>
                         {employees &&
                             employees.map((employee) => (
